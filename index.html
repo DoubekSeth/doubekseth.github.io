@@ -1,7 +1,200 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Of the People: Congressional Age Trends</title>
+    <style>
+        /* Style the div and headers */
+        .chart,
+        h2 {
+            text-align: center;
+        }
+
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .toolbox span {
+            padding: 10px;
+        }
+
+        .paragraph {
+          text-align: center;
+        }
+
+        .explanationtext {
+          width: 70%;
+          margin: auto;
+        }
+
+    </style>
+    <!-- Load d3 scripts -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://d3js.org/d3-geo-projection.v4.js"></script>
+    <script src="https://d3js.org/topojson.v3.js"></script>
+</head>
+
 <body>
-<h1>Hello World</h1>
-<p>I'm hosted with GitHub Pages.</p>
+<h3>Of the People: Congressional Age Trends</h3>
+<address>
+    <span>Seth Doubek</span>
+    <br />
+    <span>Peter Bruns</span>
+</address>
+<br />
+<br />
+
+<div class="toolbox">
+
+    <span>
+      <label>Metric</label>
+      <label for="metric"></label><select id="metric">
+        <option selected value="age_years">Age</option>
+        <option value="cmltv_cong">Terms</option>
+      </select>
+    </span>
+
+    <span>
+      <label>Chamber</label>
+      <label for="chamber"></label><select id="chamber">
+        <option selected value="both">Both</option>
+        <option value="House">House</option>
+        <option value="Senate">Senate</option>
+      </select>
+    </span>
+
+    <span>
+      <label>Congress</label>
+      <label for="congress"></label><select id="congress">
+        <option selected value="all">All</option>
+        <option value=66>66</option>
+        <option value=67>67</option>
+        <option value=68>68</option>
+        <option value=69>69</option>
+        <option value=70>70</option>
+        <option value=71>71</option>
+        <option value=72>72</option>
+        <option value=73>73</option>
+        <option value=74>74</option>
+        <option value=75>75</option>
+        <option value=76>76</option>
+        <option value=77>77</option>
+        <option value=78>78</option>
+        <option value=79>79</option>
+        <option value=80>80</option>
+        <option value=81>81</option>
+        <option value=82>82</option>
+        <option value=83>83</option>
+        <option value=84>84</option>
+        <option value=85>85</option>
+        <option value=86>86</option>
+        <option value=87>87</option>
+        <option value=88>88</option>
+        <option value=89>89</option>
+        <option value=90>90</option>
+        <option value=91>91</option>
+        <option value=92>92</option>
+        <option value=93>93</option>
+        <option value=94>94</option>
+        <option value=95>95</option>
+        <option value=96>96</option>
+        <option value=97>97</option>
+        <option value=98>98</option>
+        <option value=99>99</option>
+        <option value=100>100</option>
+        <option value=101>101</option>
+        <option value=102>102</option>
+        <option value=103>103</option>
+        <option value=104>104</option>
+        <option value=105>105</option>
+        <option value=106>106</option>
+        <option value=107>107</option>
+        <option value=108>108</option>
+        <option value=109>109</option>
+        <option value=110>110</option>
+        <option value=111>111</option>
+        <option value=112>112</option>
+        <option value=113>113</option>
+        <option value=114>114</option>
+        <option value=115>115</option>
+        <option value=116>116</option>
+        <option value=117>117</option>
+        <option value=118>118</option>
+      </select>
+    </span>
+
+    <span>
+      <input type="checkbox" id="violin">
+      <label for="violin">Use Violin</label>
+    </span>
+</div>
+<br />
+
+<div class="explanationtext">
+  <h2>About the Project</h2>
+  <div class="paragraph">
+    <p>Age has come to play an important role in the current politics of The United States. 
+    President Joe Biden is the oldest president that we've ever had at 80 years old, and Donald Trump isn't far behind at 77 years of age.
+    According to NPR, the median age in 2022 of the U.S. was 38.9, meanwhile in the House it was 57.3 and the senate was 63.9, nearly a twenty year gap. 
+    The current congress, the 118th congress, is one of the oldest in the history of The US.</p>
+    <p>This project seeks to further explore how the age of congress has changed over the years.
+       Due to data limitations, we only have the ages of those working in congress starting at the 66th congress (1919-1921). 
+       Using our tools, one can analyze how congress has changed as a whole using the line chart, and choose to view a specific chamber. 
+       If selecting a specific congress, one can see a breakdown of the distribution of that congress and pick out individuals using an organized heatmap.
+       Additionally, we've provided two maps that show the average age or term number of their congressional representatives in a specific state. </p>
+  </div>
+</div>
+
+<div class="row chart">
+    <div class="chart">
+        <h2>All Congress</h2>
+        <div id="Main-div">
+        </div>
+    </div>
+</div>
+
+<div class="row chart">
+    <div class="chart">
+        <div id="Grid-legend-div">
+        </div>
+    </div>
+</div>
+
+<div class="explanationtext">
+  <div class="paragraph">
+    <p>For the line chart, on the x-axis we have the congress and on the y-axis we display the age. 
+      The line in the chart represents the average age (or number of terms) of congress members during that meeting, and the dots each represent one member of congress.
+      One can also choose to replace the dots with a two lines by selecting the "Use Violin" option, which will then display two additional lines corresponding to the maximum and the minimum.</p>
+    <p>When a specific congress is selected, a heat map will instead be shown. 
+      The value is the age of the person in congress, and if split by party is activited then hue will show which party they belong to.
+      Information about each individual congress person can be found below the chart when hovering over someone.</p>
+      <p>The maps below show the average value for the selected metric for each state for either the full dataset or a selected session of congress.
+          Hovering will show the value for that state, and clicking on a state will update the main visualization to show the trend
+      for the selected state for the chamber shown on the map on which it was selected.</p>
+  </div>
+</div>
+<button id="clear-button">Clear Selected States</button>
+<div class="row chart">
+    <div class="chart">
+        <h2>House</h2>
+        <div id="House-div"></div>
+    </div>
+    <div class="chart">
+        <h2>Senate</h2>
+        <div id="Senate-div"></div>
+    </div>
+</div>
+<div class="row chart">
+    <div class = "chart">
+        <div id = "Map-legend-div">
+        </div>
+    </div>
+</div>
+<!-- Load JS scripts-->
+<script src="script.js"></script>
+<script src="main.js"></script>
+<script src="maps.js"></script>
 </body>
 </html>
