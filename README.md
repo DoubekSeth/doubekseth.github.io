@@ -7,3 +7,6 @@ US GeoJSON from https://eric.clst.org/tech/usgeojson/
 
 # Demo
 By going to https://doubekseth.github.io/ you can play with our visualization without needing to host!
+
+# Dependencies
+The only dependencies for our code is using d3
